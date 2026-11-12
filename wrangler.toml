@@ -1,0 +1,6 @@
+name = "yours-from-here-microsite"
+account_id = "c3974c9f555d3c107ece3f4f48defb23"
+compatibility_date = "2026-11-12"
+
+[assets]
+directory = "."
