@@ -1,0 +1,17 @@
+'use strict';
+const toggle=document.querySelector('.menu-toggle');
+const nav=document.querySelector('#navigation');
+function closeMenu(){nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Open navigation');}
+toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';nav.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');});
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});
+const editions={begin:{label:'EDITION 01',title:'Begin Here',intro:'You don’t need to have everything figured out. This first envelope is an invitation to make a little room for yourself.',items:['A personal welcome letter from Lizelle.','A mountain-inspired art postcard and coordinating stickers.','Book Notes and a Small Fascination in your reading-and-curiosity foldout.','A solo café-date idea, with a simple at-home alternative.','An optional reflection: What would I like a little more room for?']},curiosity:{label:'EDITION 02',title:'Follow Your Curiosity',intro:'What catches your attention when you give yourself time to notice? Explore an interest without needing to turn it into an achievement.',items:['A letter about following an interest for the enjoyment of it.','Illustrated paper treasures inspired by discovery.','A book recommendation and a sourced fact to spark a new conversation.','An invitation to visit an unfamiliar library shelf, street or museum room.','A small creative invitation: collect or draw three things that caught your eye.']},compass:{label:'EDITION 03',title:'Your Own Compass',intro:'Your values can be a quiet guide. Notice the things that make an ordinary day feel a little more like your own.',items:['A personal letter inspired by the things that matter to us.','A signpost-and-mountain art postcard with coordinating stickers.','Book Notes and a fascination about finding direction in the natural world.','A little outing shaped by something you value: beauty, learning, rest or adventure.','An optional reflection on three values you would like more space for.']}};
+const dialog=document.querySelector('#edition-dialog');
+let previousFocus;
+document.querySelectorAll('[data-edition]').forEach(button=>button.addEventListener('click',()=>{const item=editions[button.dataset.edition];previousFocus=button;document.querySelector('#dialog-label').textContent=item.label;document.querySelector('#dialog-title').textContent=item.title;document.querySelector('#dialog-intro').textContent=item.intro;const list=document.querySelector('#dialog-items');list.replaceChildren(...item.items.map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));dialog.showModal();}));
+function closeDialog(){dialog.close();previousFocus?.focus();}
+document.querySelector('.dialog-close').addEventListener('click',closeDialog);
+document.querySelector('.dialog-done').addEventListener('click',closeDialog);
+dialog.addEventListener('click',e=>{if(e.target===dialog){const box=dialog.getBoundingClientRect();if(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom)closeDialog();}});
+dialog.addEventListener('close',()=>previousFocus?.focus());
+document.querySelector('#year').textContent=new Date().getFullYear();
